@@ -18,8 +18,10 @@ a {
 }
 
 .theme-light {
-  background-color: #f8fafc;
   color: #0f172a;
+  background: radial-gradient(circle at 20% 20%, #e0f2fe 0, transparent 28%),
+    radial-gradient(circle at 80% 0%, #f5d0fe 0, transparent 30%),
+    linear-gradient(180deg, #f8fafc 0%, #e2e8f0 45%, #eef2ff 100%);
 }
 
 .theme-dark {
@@ -29,6 +31,20 @@ a {
 
 .glass-panel {
   @apply bg-white/5 backdrop-blur-sm border border-white/10 shadow-soft rounded-2xl;
+}
+
+.theme-light .glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(148, 163, 184, 0.35);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+}
+
+.theme-light .section-title {
+  @apply text-slate-900;
+}
+
+.theme-light .section-subtitle {
+  @apply text-slate-600;
 }
 
 .card-grid {

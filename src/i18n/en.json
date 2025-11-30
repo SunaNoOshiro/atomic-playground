@@ -23,9 +23,22 @@
     "title": "Atom view",
     "modeRealistic": "Realistic",
     "modeSimplified": "Simplified",
+    "modeDescriptions": {
+      "realistic": "Realistic mode adds wobble, glowing shells, and starry depth to highlight how orbits lean and stretch in space.",
+      "simplified": "Simplified mode flattens orbits, mutes glow, and removes extra noise so you can focus on structure without distractions."
+    },
     "valence": "Valence shell",
     "animation": "Bond animation",
     "motionHint": "Elliptical orbital wobble",
+    "legend": {
+      "title": "Color legend",
+      "description": "Use the colors to match objects in the scene: the glowing ring marks the valence shell, purple dashes show active bond directions.",
+      "protons": "Protons in the nucleus",
+      "neutrons": "Neutrons in the nucleus",
+      "electrons": "Electrons on their paths",
+      "valence": "Valence shell highlight",
+      "bonds": "Animated bond hints"
+    },
     "structure": {
       "heading": "Structure overview",
       "protons": "Protons",

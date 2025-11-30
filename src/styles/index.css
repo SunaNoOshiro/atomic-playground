@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #e2e8f0;
+  background-color: #0f172a;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.theme-light {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.theme-dark {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+.glass-panel {
+  @apply bg-white/5 backdrop-blur-sm border border-white/10 shadow-soft rounded-2xl;
+}
+
+.card-grid {
+  @apply grid gap-6 md:grid-cols-3;
+}
+
+.section-title {
+  @apply text-xl font-semibold tracking-tight text-slate-100;
+}
+
+.section-subtitle {
+  @apply text-sm text-slate-300;
+}

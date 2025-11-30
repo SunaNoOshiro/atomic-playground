@@ -1,0 +1,45 @@
+{
+  "app": {
+    "title": "Atomic Playground",
+    "subtitle": "Interactive atoms, valence, and molecule creation"
+  },
+  "nav": {
+    "home": "Home",
+    "atom": "Atom",
+    "molecule": "Molecule",
+    "settings": "Settings"
+  },
+  "home": {
+    "heroTitle": "Explore atoms in 3D space",
+    "heroSubtitle": "Learn how electrons move, how valence shells form, and how bonds emerge.",
+    "cta": "Launch visualizer",
+    "features": [
+      "Valence highlighting & shell distribution",
+      "Step-by-step molecule builder",
+      "Per-module logging with runtime controls"
+    ]
+  },
+  "atom": {
+    "title": "Atom view",
+    "modeRealistic": "Realistic",
+    "modeSimplified": "Simplified",
+    "valence": "Valence shell",
+    "animation": "Bond animation"
+  },
+  "molecule": {
+    "title": "Molecule builder",
+    "subtitle": "Attach atoms and watch bonds animate",
+    "addAtom": "Add atom",
+    "bond": "Bond atoms",
+    "reset": "Reset"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "logging": "Logging level",
+    "speed": "Animation speed",
+    "atomMode": "Atom mode",
+    "loggingToggle": "Enable logging"
+  }
+}

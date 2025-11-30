@@ -78,6 +78,11 @@
     "logging": "Рівень логування",
     "speed": "Швидкість анімацій",
     "atomMode": "Режим атома",
+    "visualizationMode": "Режим візуалізації",
+    "visualizationOptions": {
+      "bohr": "Модель Бора",
+      "quantum": "Квантова хмара"
+    },
     "loggingToggle": "Увімкнути логування",
     "atomSelection": "Оберіть атом"
   }

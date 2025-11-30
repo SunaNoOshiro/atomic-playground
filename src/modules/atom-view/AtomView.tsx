@@ -26,6 +26,8 @@ export const AtomView = () => {
       ? t('atom.modeDescriptions.realistic')
       : t('atom.modeDescriptions.simplified');
 
+  const visualizationLabel = t(`settings.visualizationOptions.${settings.visualizationMode}`);
+
   const canvasBackground = useMemo(() => {
     if (settings.theme === 'light') {
       return '#dfe2d6';
@@ -48,7 +50,8 @@ export const AtomView = () => {
         <div>
           <p className="text-sm uppercase tracking-[0.2em] text-primary">{t('atom.title')}</p>
           <h3 className="text-2xl font-semibold">{t(`atom.presets.${atomType}.label`)}</h3>
-          <p className="text-sm text-slate-400">{t('atom.mode' + (settings.atomMode === 'realistic' ? 'Realistic' : 'Simplified'))}</p>
+            <p className="text-sm text-slate-400">{t('atom.mode' + (settings.atomMode === 'realistic' ? 'Realistic' : 'Simplified'))}</p>
+            <p className="text-xs text-primary font-medium mt-1">{visualizationLabel}</p>
           <p className="mt-1 text-xs text-slate-500 max-w-xl leading-relaxed">{modeDescription}</p>
         </div>
         <div className="flex flex-col gap-2 items-end">
@@ -77,12 +80,22 @@ export const AtomView = () => {
             <directionalLight position={[5, 5, 5]} intensity={1.2} />
             <Suspense fallback={null}>
               <Float speed={settings.animationSpeed} rotationIntensity={0.4} floatIntensity={0.6}>
-                <Nucleus protons={atom.atomicNumber} neutrons={atom.neutrons} />
+                <Nucleus
+                  protons={atom.atomicNumber}
+                  neutrons={atom.neutrons}
+                  visualizationMode={settings.visualizationMode}
+                />
                 {atom.shells.map((shell) => (
-                  <ElectronShell key={shell.level} shell={shell} />
+                  <ElectronShell key={shell.level} shell={shell} visualizationMode={settings.visualizationMode} />
                 ))}
-                {valenceShell && <ValenceHighlight radius={valenceShell.radius} visible />}
-                <BondingAnimation molecule={molecule} />
+                {valenceShell && (
+                  <ValenceHighlight
+                    radius={valenceShell.radius}
+                    visible
+                    visualizationMode={settings.visualizationMode}
+                  />
+                )}
+                <BondingAnimation molecule={molecule} visualizationMode={settings.visualizationMode} />
               </Float>
               {settings.atomMode === 'realistic' && <Stars radius={40} depth={20} count={800} factor={4} fade speed={1} />}
             </Suspense>

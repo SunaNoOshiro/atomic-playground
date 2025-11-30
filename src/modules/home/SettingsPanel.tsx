@@ -3,10 +3,12 @@ import { changeLanguage } from '@core/services/LocalizationService';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { useSceneStore } from '@state/scene.store';
+import { VisualizationMode } from '@core/models/settings';
 
 const loggingLevels = ['debug', 'info', 'warn', 'error'] as const;
 const themes = ['system', 'light', 'dark'] as const;
 const atomModes = ['realistic', 'simplified'] as const;
+const visualizationModes = [VisualizationMode.BOHR, VisualizationMode.QUANTUM] as const;
 
 export const SettingsPanel = () => {
   const { t } = useTranslation();
@@ -113,6 +115,27 @@ export const SettingsPanel = () => {
                 onClick={() => updateSettings({ atomMode: mode })}
               >
                 {mode}
+              </button>
+            ))}
+          </div>
+        </label>
+
+        <label className="flex flex-col gap-2 text-sm">
+          <span className="text-slate-200 font-semibold">{t('settings.visualizationMode')}</span>
+          <div className="grid grid-cols-2 gap-2">
+            {visualizationModes.map((mode) => (
+              <button
+                key={mode}
+                className={`rounded-lg px-3 py-2 border transition text-left ${
+                  settings.visualizationMode === mode
+                    ? 'border-primary bg-primary/20 text-primary shadow-[0_0_0_1px_rgba(94,234,212,0.4)]'
+                    : 'border-white/10 hover:border-white/20 text-slate-100'
+                }`}
+                onClick={() => updateSettings({ visualizationMode: mode })}
+              >
+                <div className="text-sm font-semibold">
+                  {t(`settings.visualizationOptions.${mode}`)}
+                </div>
               </button>
             ))}
           </div>

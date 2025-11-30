@@ -1,16 +1,20 @@
 import { Torus } from '@react-three/drei';
 import { useSpring, a } from '@react-spring/three';
 import { useSettingsStore } from '@state/settings.store';
+import { VisualizationMode } from '@core/models/settings';
 
 interface ValenceHighlightProps {
   radius: number;
   visible: boolean;
+  visualizationMode: VisualizationMode;
 }
 
-export const ValenceHighlight = ({ radius, visible }: ValenceHighlightProps) => {
+export const ValenceHighlight = ({ radius, visible, visualizationMode }: ValenceHighlightProps) => {
   const { settings } = useSettingsStore();
   const color = settings.atomMode === 'realistic' ? '#f2c94c' : '#f4a261';
-  const baseOpacity = settings.atomMode === 'realistic' ? 0.58 : 0.32;
+  const baseOpacity =
+    (settings.atomMode === 'realistic' ? 0.58 : 0.32) *
+    (visualizationMode === VisualizationMode.QUANTUM ? 1.2 : 1);
   const { scale, opacity } = useSpring({
     scale: visible ? 1 : 0.5,
     opacity: visible ? baseOpacity : 0,

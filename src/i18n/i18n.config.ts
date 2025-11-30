@@ -1,7 +1,6 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { createLogger } from '@core/services/LoggerService';
-import { moduleLogging } from '@config/logger.config';
 
 const logger = createLogger('i18n');
 

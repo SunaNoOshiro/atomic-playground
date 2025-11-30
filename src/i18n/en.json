@@ -78,7 +78,24 @@
     "logging": "Logging level",
     "speed": "Animation speed",
     "atomMode": "Atom mode",
+    "visualizationMode": "Visualization mode",
+    "visualizationModes": {
+      "classic": {
+        "label": "Classic",
+        "description": "Classic view keeps orbital paths tidy and minimizes noise for quick exploration."
+      },
+      "quantum": {
+        "label": "Quantum",
+        "description": "Quantum view emphasizes probability clouds, wobble, and layered glow for a more energetic scene."
+      }
+    },
+    "quantumModeInfo": "Quantum view highlights wave-like motion.",
+    "quantumIntensity": "Quantum animation intensity",
+    "quantumIntensityHint": "Increase to amplify orbital wobble; lower it to keep clouds calmer.",
     "loggingToggle": "Enable logging",
-    "atomSelection": "Choose an atom"
+    "loggingHint": "Toggles runtime logs for debugging individual modules.",
+    "atomSelection": "Choose an atom",
+    "reducedMotion": "Reduce motion",
+    "reducedMotionHint": "Softens particle wobble and glow pulses for sensitive viewers."
   }
 }

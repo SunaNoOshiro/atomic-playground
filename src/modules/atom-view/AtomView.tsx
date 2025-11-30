@@ -9,6 +9,8 @@ import { useSceneStore } from '@state/scene.store';
 import { useSettingsStore } from '@state/settings.store';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
+import { QuantumAtomRenderer } from '@modules/quantum-atom-view/QuantumAtomRenderer';
+import { VisualizationMode } from '@core/models/settings';
 
 export const AtomView = () => {
   const { atom, molecule, atomType } = useSceneStore();
@@ -80,22 +82,28 @@ export const AtomView = () => {
             <directionalLight position={[5, 5, 5]} intensity={1.2} />
             <Suspense fallback={null}>
               <Float speed={settings.animationSpeed} rotationIntensity={0.4} floatIntensity={0.6}>
-                <Nucleus
-                  protons={atom.atomicNumber}
-                  neutrons={atom.neutrons}
-                  visualizationMode={settings.visualizationMode}
-                />
-                {atom.shells.map((shell) => (
-                  <ElectronShell key={shell.level} shell={shell} visualizationMode={settings.visualizationMode} />
-                ))}
-                {valenceShell && (
-                  <ValenceHighlight
-                    radius={valenceShell.radius}
-                    visible
-                    visualizationMode={settings.visualizationMode}
-                  />
+                {settings.visualizationMode === VisualizationMode.BOHR ? (
+                  <>
+                    <Nucleus
+                      protons={atom.atomicNumber}
+                      neutrons={atom.neutrons}
+                      visualizationMode={settings.visualizationMode}
+                    />
+                    {atom.shells.map((shell) => (
+                      <ElectronShell key={shell.level} shell={shell} visualizationMode={settings.visualizationMode} />
+                    ))}
+                    {valenceShell && (
+                      <ValenceHighlight
+                        radius={valenceShell.radius}
+                        visible
+                        visualizationMode={settings.visualizationMode}
+                      />
+                    )}
+                    <BondingAnimation molecule={molecule} visualizationMode={settings.visualizationMode} />
+                  </>
+                ) : (
+                  <QuantumAtomRenderer atom={atom} />
                 )}
-                <BondingAnimation molecule={molecule} visualizationMode={settings.visualizationMode} />
               </Float>
               {settings.atomMode === 'realistic' && <Stars radius={40} depth={20} count={800} factor={4} fade speed={1} />}
             </Suspense>

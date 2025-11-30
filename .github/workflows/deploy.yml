@@ -26,6 +26,8 @@ jobs:
         with:
           node-version: 18
           cache: npm
+          # cache based on package manifest so the workflow does not fail when a lock file is absent
+          cache-dependency-path: package.json
 
       - name: Install dependencies
         run: npm install

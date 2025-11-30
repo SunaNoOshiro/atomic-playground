@@ -15,6 +15,10 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
   const speed = 0.6 * settings.animationSpeed * (shell.isValence ? 1.4 : 1);
   const isRealistic = settings.atomMode === 'realistic';
 
+  const orbitColor = shell.isValence ? '#f3c94c' : '#b8c4d9';
+  const trackColor = shell.isValence ? '#f0b429' : '#7cc7dd';
+  const electronColor = shell.isValence ? '#f4a261' : '#7ad0e3';
+
   const electronTracks = useMemo(() => {
     return shell.electrons.map((electron, index) => {
       const tilt = new Euler(
@@ -76,18 +80,32 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
 
   return (
     <group>
-      <Line points={baseOrbit} color={shell.isValence ? '#f472b6' : '#94a3b8'} linewidth={1} dashed dashSize={0.16} gapSize={0.08} />
+      <Line
+        points={baseOrbit}
+        color={orbitColor}
+        linewidth={1}
+        dashed
+        dashSize={0.16}
+        gapSize={0.08}
+        opacity={0.85}
+      />
       {trackLines.map((track) => (
-        <Line key={`track-${track.id}`} points={track.points} color={shell.isValence ? '#fb7185' : '#38bdf8'} linewidth={0.8} opacity={0.85} />
+        <Line
+          key={`track-${track.id}`}
+          points={track.points}
+          color={trackColor}
+          linewidth={0.8}
+          opacity={0.78}
+        />
       ))}
       <group ref={groupRef}>
         {electronTracks.map((electron) => (
           <mesh key={electron.id}>
             <sphereGeometry args={[0.08, 16, 16]} />
             <meshStandardMaterial
-              color={shell.isValence ? '#fb7185' : '#22d3ee'}
-              emissive={shell.isValence ? '#fb7185' : '#22d3ee'}
-              emissiveIntensity={0.7}
+              color={electronColor}
+              emissive={electronColor}
+              emissiveIntensity={0.55}
             />
           </mesh>
         ))}

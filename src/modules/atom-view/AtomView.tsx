@@ -27,11 +27,11 @@ export const AtomView = () => {
       : t('atom.modeDescriptions.simplified');
 
   const legend = [
-    { color: '#ff5f6d', label: t('atom.legend.protons') },
-    { color: '#6ee7b7', label: t('atom.legend.neutrons') },
-    { color: '#22d3ee', label: t('atom.legend.electrons') },
-    { color: '#FF6584', label: t('atom.legend.valence') },
-    { color: '#7c3aed', label: t('atom.legend.bonds') }
+    { color: '#f59f8b', label: t('atom.legend.protons') },
+    { color: '#9ad6b0', label: t('atom.legend.neutrons') },
+    { color: '#7ad0e3', label: t('atom.legend.electrons') },
+    { color: '#f2c94c', label: t('atom.legend.valence') },
+    { color: '#b6a8ff', label: t('atom.legend.bonds') }
   ];
 
   return (
@@ -63,7 +63,16 @@ export const AtomView = () => {
       <div className="grid lg:grid-cols-[2fr_1fr] gap-3">
         <div className="h-[380px] w-full rounded-xl overflow-hidden border border-white/10">
           <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
-            <color attach="background" args={[settings.theme === 'light' ? '#f8fafc' : settings.atomMode === 'simplified' ? '#0f172a' : '#0b1224']} />
+            <color
+              attach="background"
+              args={[
+                settings.theme === 'light'
+                  ? '#f6f7f2'
+                  : settings.atomMode === 'simplified'
+                  ? '#0c1624'
+                  : '#0a0f1a'
+              ]}
+            />
             <ambientLight intensity={0.6} />
             <directionalLight position={[5, 5, 5]} intensity={1.2} />
             <Suspense fallback={null}>

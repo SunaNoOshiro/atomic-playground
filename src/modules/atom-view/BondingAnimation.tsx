@@ -11,7 +11,7 @@ export const BondingAnimation = ({ molecule }: BondingAnimationProps) => {
 
   if (!molecule.bonds.length) return null;
 
-  const bondColor = '#7c3aed';
+  const bondColor = '#b6a8ff';
 
   return (
     <group>

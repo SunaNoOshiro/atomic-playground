@@ -32,7 +32,7 @@
     "motionHint": "Elliptical orbital wobble",
     "legend": {
       "title": "Color legend",
-      "description": "Use the colors to match objects in the scene: the glowing ring marks the valence shell, purple dashes show active bond directions.",
+      "description": "Use the soft colors to match objects in the scene: the warm gold ring marks the valence shell, lavender dashes hint at bond directions, and coral/teal dots show protons, neutrons, and electrons.",
       "protons": "Protons in the nucleus",
       "neutrons": "Neutrons in the nucleus",
       "electrons": "Electrons on their paths",

@@ -9,8 +9,8 @@ interface ValenceHighlightProps {
 
 export const ValenceHighlight = ({ radius, visible }: ValenceHighlightProps) => {
   const { settings } = useSettingsStore();
-  const color = settings.atomMode === 'realistic' ? '#FF6584' : '#fb7185';
-  const baseOpacity = settings.atomMode === 'realistic' ? 0.6 : 0.35;
+  const color = settings.atomMode === 'realistic' ? '#f2c94c' : '#f4a261';
+  const baseOpacity = settings.atomMode === 'realistic' ? 0.58 : 0.32;
   const { scale, opacity } = useSpring({
     scale: visible ? 1 : 0.5,
     opacity: visible ? baseOpacity : 0,

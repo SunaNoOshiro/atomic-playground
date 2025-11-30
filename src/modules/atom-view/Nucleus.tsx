@@ -16,7 +16,7 @@ export const Nucleus = ({ protons, neutrons }: NucleusProps) => {
         (Math.random() - 0.5) * 0.6,
         (Math.random() - 0.5) * 0.6
       ),
-      color: idx < protons ? new Color('#ff5f6d') : new Color('#6ee7b7'),
+      color: idx < protons ? new Color('#f59f8b') : new Color('#9ad6b0'),
       wobbleSpeed: 1.2 + Math.random() * 0.6,
       wobbleIntensity: 0.02 + Math.random() * 0.02
     }));

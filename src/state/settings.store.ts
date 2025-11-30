@@ -9,10 +9,7 @@ const defaults: SettingsState = {
   loggingLevel: 'info',
   animationSpeed: 1,
   atomMode: 'realistic',
-  enableLogging: true,
-  visualizationMode: 'classic',
-  quantumAnimationIntensity: 1,
-  reducedMotion: false
+  enableLogging: true
 };
 
 const settingsService = new SettingsService(new LocalSettingsProvider(), defaults);

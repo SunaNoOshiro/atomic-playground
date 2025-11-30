@@ -1,7 +1,6 @@
 export type Theme = 'light' | 'dark' | 'system';
 export type AtomMode = 'realistic' | 'simplified';
 export type LoggingLevel = 'debug' | 'info' | 'warn' | 'error';
-export type VisualizationMode = 'classic' | 'quantum';
 
 export interface SettingsState {
   theme: Theme;
@@ -10,9 +9,6 @@ export interface SettingsState {
   animationSpeed: number;
   atomMode: AtomMode;
   enableLogging: boolean;
-  visualizationMode: VisualizationMode;
-  quantumAnimationIntensity: number;
-  reducedMotion: boolean;
 }
 
 export interface ISettingsProvider {

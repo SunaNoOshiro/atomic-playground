@@ -10,7 +10,9 @@ const defaults: SettingsState = {
   animationSpeed: 1,
   atomMode: 'realistic',
   enableLogging: true,
-  visualizationMode: VisualizationMode.BOHR
+  visualizationMode: VisualizationMode.BOHR,
+  quantumAnimationIntensity: 1,
+  reducedMotion: false
 };
 
 const settingsService = new SettingsService(new LocalSettingsProvider(), defaults);

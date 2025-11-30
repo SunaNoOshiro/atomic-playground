@@ -24,7 +24,32 @@
     "modeRealistic": "Realistic",
     "modeSimplified": "Simplified",
     "valence": "Valence shell",
-    "animation": "Bond animation"
+    "animation": "Bond animation",
+    "motionHint": "Elliptical orbital wobble",
+    "structure": {
+      "heading": "Structure overview",
+      "protons": "Protons",
+      "neutrons": "Neutrons",
+      "electrons": "Electrons",
+      "shells": "Electron shells"
+    },
+    "presets": {
+      "oxygen": {
+        "label": "Oxygen",
+        "summary": "Oxygen has three occupied shells with six valence electrons that seek bonds to stabilize the outer shell.",
+        "structure": "Two electrons fill the first shell, six more occupy the second and third shells, creating a reactive valence shell."
+      },
+      "hydrogen": {
+        "label": "Hydrogen",
+        "summary": "Hydrogen contains a single proton and electron, making it highly reactive and eager to share electrons.",
+        "structure": "One electron orbits close to the nucleus with no inner shielding, so it pairs easily with other atoms."
+      },
+      "helium": {
+        "label": "Helium",
+        "summary": "Helium carries two protons, two neutrons, and a full first shell, resulting in an inert, stable atom.",
+        "structure": "Both electrons sit in the first shell, leaving no valence electrons and making helium chemically noble."
+      }
+    }
   },
   "molecule": {
     "title": "Molecule builder",
@@ -40,6 +65,7 @@
     "logging": "Logging level",
     "speed": "Animation speed",
     "atomMode": "Atom mode",
-    "loggingToggle": "Enable logging"
+    "loggingToggle": "Enable logging",
+    "atomSelection": "Choose an atom"
   }
 }

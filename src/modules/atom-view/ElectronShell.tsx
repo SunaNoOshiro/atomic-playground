@@ -1,7 +1,7 @@
 import { Line } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
-import { Group, Vector3 } from 'three';
+import { Euler, Group, Matrix4, Vector3 } from 'three';
 import { Shell } from '@core/models/atom';
 import { useSettingsStore } from '@state/settings.store';
 
@@ -14,10 +14,28 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
   const groupRef = useRef<Group>(null);
   const speed = 0.6 * settings.animationSpeed * (shell.isValence ? 1.4 : 1);
 
-  const points = useMemo(() => new Array(64).fill(0).map((_, i) => {
-    const angle = (i / 64) * Math.PI * 2;
-    return new Vector3(Math.cos(angle) * shell.radius, Math.sin(angle) * shell.radius, 0);
-  }), [shell.radius]);
+  const orbit = useMemo(() => {
+    const tilt = new Euler((Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 0.4);
+    const eccentricity = settings.atomMode === 'realistic' ? 0.35 : 0.05;
+    const wobble = settings.atomMode === 'realistic' ? 0.18 : 0.06;
+    const xRadius = shell.radius * (1 + eccentricity * 0.4);
+    const zRadius = shell.radius * (1 - eccentricity * 0.3);
+
+    return { tilt, wobble, xRadius, zRadius };
+  }, [settings.atomMode, shell.radius]);
+
+  const points = useMemo(() => {
+    const matrix = new Matrix4().makeRotationFromEuler(orbit.tilt);
+    return new Array(96).fill(0).map((_, i) => {
+      const angle = (i / 96) * Math.PI * 2;
+      const position = new Vector3(
+        Math.cos(angle) * orbit.xRadius,
+        Math.sin(angle * 0.9) * orbit.wobble,
+        Math.sin(angle) * orbit.zRadius
+      );
+      return position.applyMatrix4(matrix);
+    });
+  }, [orbit.tilt, orbit.wobble, orbit.xRadius, orbit.zRadius]);
 
   const electronPositions = useMemo(() => {
     return shell.electrons.map((electron, index) => ({
@@ -31,11 +49,12 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
     groupRef.current?.children.forEach((child, idx) => {
       const electron = electronPositions[idx];
       const angle = elapsed + electron.offset;
-      child.position.set(
-        Math.cos(angle) * shell.radius,
-        Math.sin(angle) * shell.radius,
-        Math.sin(angle * 0.7) * 0.15
-      );
+      const position = new Vector3(
+        Math.cos(angle) * orbit.xRadius,
+        Math.sin(angle * 0.9) * orbit.wobble,
+        Math.sin(angle) * orbit.zRadius
+      ).applyEuler(orbit.tilt);
+      child.position.copy(position);
     });
   });
 

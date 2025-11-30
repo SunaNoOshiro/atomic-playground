@@ -2,6 +2,7 @@ import { useSettingsStore } from '@state/settings.store';
 import { changeLanguage } from '@core/services/LocalizationService';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
+import { useSceneStore } from '@state/scene.store';
 
 const loggingLevels = ['debug', 'info', 'warn', 'error'] as const;
 const themes = ['system', 'light', 'dark'] as const;
@@ -10,6 +11,7 @@ const atomModes = ['realistic', 'simplified'] as const;
 export const SettingsPanel = () => {
   const { t } = useTranslation();
   const { settings, updateSettings } = useSettingsStore();
+  const { atomOptions, atomType, selectAtom } = useSceneStore();
 
   useEffect(() => {
     changeLanguage(settings.language);
@@ -37,6 +39,26 @@ export const SettingsPanel = () => {
             ))}
           </select>
         </label>
+
+        <div className="flex flex-col gap-2 text-sm">
+          <span className="text-slate-200 font-semibold">{t('settings.atomSelection')}</span>
+          <div className="grid grid-cols-3 gap-2">
+            {atomOptions.map((option) => (
+              <button
+                key={option.key}
+                className={`rounded-lg px-3 py-2 border transition ${
+                  atomType === option.key
+                    ? 'border-primary bg-primary/20 text-primary shadow-[0_0_0_1px_rgba(94,234,212,0.4)]'
+                    : 'border-white/10 hover:border-white/20 text-slate-100'
+                }`}
+                onClick={() => selectAtom(option.key)}
+              >
+                <div className="text-sm font-semibold">{option.symbol}</div>
+                <div className="text-[11px] text-slate-300 leading-tight">{t(`atom.presets.${option.key}.label`)}</div>
+              </button>
+            ))}
+          </div>
+        </div>
 
         <label className="flex flex-col gap-2 text-sm">
           <span className="text-slate-200 font-semibold">{t('settings.language')}</span>

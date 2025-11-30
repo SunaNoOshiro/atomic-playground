@@ -26,6 +26,14 @@ export const AtomView = () => {
       ? t('atom.modeDescriptions.realistic')
       : t('atom.modeDescriptions.simplified');
 
+  const canvasBackground = useMemo(() => {
+    if (settings.theme === 'light') {
+      return '#dfe2d6';
+    }
+
+    return settings.atomMode === 'simplified' ? '#0c1624' : '#0a0f1a';
+  }, [settings.atomMode, settings.theme]);
+
   const legend = [
     { color: '#f59f8b', label: t('atom.legend.protons') },
     { color: '#9ad6b0', label: t('atom.legend.neutrons') },
@@ -63,16 +71,8 @@ export const AtomView = () => {
       <div className="grid lg:grid-cols-[2fr_1fr] gap-3">
         <div className="h-[380px] w-full rounded-xl overflow-hidden border border-white/10">
           <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
-            <color
-              attach="background"
-              args={[
-                settings.theme === 'light'
-                  ? '#f6f7f2'
-                  : settings.atomMode === 'simplified'
-                  ? '#0c1624'
-                  : '#0a0f1a'
-              ]}
-            />
+            <color attach="background" args={[canvasBackground]} />
+            <fog attach="fog" args={[canvasBackground, 10, 22]} />
             <ambientLight intensity={0.6} />
             <directionalLight position={[5, 5, 5]} intensity={1.2} />
             <Suspense fallback={null}>

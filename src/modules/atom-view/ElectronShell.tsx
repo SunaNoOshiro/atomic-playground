@@ -14,10 +14,29 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
   const groupRef = useRef<Group>(null);
   const speed = 0.6 * settings.animationSpeed * (shell.isValence ? 1.4 : 1);
   const isRealistic = settings.atomMode === 'realistic';
+  const isLightTheme = settings.theme === 'light';
 
-  const orbitColor = shell.isValence ? '#f3c94c' : '#b8c4d9';
-  const trackColor = shell.isValence ? '#f0b429' : '#7cc7dd';
-  const electronColor = shell.isValence ? '#f4a261' : '#7ad0e3';
+  const orbitColor = shell.isValence
+    ? isLightTheme
+      ? '#cf9a1b'
+      : '#f3c94c'
+    : isLightTheme
+    ? '#4b72b2'
+    : '#b8c4d9';
+  const trackColor = shell.isValence
+    ? isLightTheme
+      ? '#e5af22'
+      : '#f0b429'
+    : isLightTheme
+    ? '#2f9ac2'
+    : '#7cc7dd';
+  const electronColor = shell.isValence
+    ? isLightTheme
+      ? '#d47a23'
+      : '#f4a261'
+    : isLightTheme
+    ? '#1f82af'
+    : '#7ad0e3';
 
   const electronTracks = useMemo(() => {
     return shell.electrons.map((electron, index) => {

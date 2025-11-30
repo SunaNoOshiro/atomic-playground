@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { QuantumAtomRenderer } from '@modules/quantum-atom-view/QuantumAtomRenderer';
 import { VisualizationMode } from '@core/models/settings';
+import { useOrbitals } from '@modules/quantum-atom-view/hooks/useOrbitals';
 
 export const AtomView = () => {
   const { atom, molecule, atomType } = useSceneStore();
@@ -18,15 +19,39 @@ export const AtomView = () => {
   const { t } = useTranslation();
 
   const valenceShell = atom.shells.find((shell) => shell.isValence);
+  const orbitalSets = useOrbitals(atom);
   const electronCount = useMemo(
     () => atom.shells.reduce((total, shell) => total + shell.electrons.length, 0),
     [atom.shells]
   );
 
+  const valenceOrbitals = useMemo(() => {
+    const valenceSet = orbitalSets.find((set) => set.isValence);
+    if (!valenceSet) return [] as { label: string; electrons: number; orbitalCount: number }[];
+
+    const summaryMap = new Map<string, { label: string; electrons: number; orbitalCount: number }>();
+
+    valenceSet.orbitals.forEach((orbital) => {
+      const label = `${orbital.principal}${orbital.type}`;
+      const existing = summaryMap.get(label) ?? { label, electrons: 0, orbitalCount: 0 };
+      existing.electrons += orbital.electrons;
+      existing.orbitalCount += 1;
+      summaryMap.set(label, existing);
+    });
+
+    return Array.from(summaryMap.values()).sort((a, b) =>
+      a.label.localeCompare(b.label, undefined, { numeric: true })
+    );
+  }, [orbitalSets]);
+
   const modeDescription =
     settings.atomMode === 'realistic'
       ? t('atom.modeDescriptions.realistic')
       : t('atom.modeDescriptions.simplified');
+
+  const valenceBondingDescription = t(`atom.presets.${atomType}.bonding`, {
+    defaultValue: t('atom.valenceOrbitals.bondingHint')
+  });
 
   const visualizationLabel = t(`settings.visualizationOptions.${settings.visualizationMode}`);
 
@@ -149,6 +174,38 @@ export const AtomView = () => {
               {atom.shells.map((shell) => `${shell.level}(${shell.electrons.length})`).join(' • ')}
             </li>
           </ul>
+          <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-xs text-slate-200 space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="font-semibold text-slate-100">{t('atom.valenceOrbitals.heading')}</p>
+              <span className="px-2 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+                {t('atom.valenceOrbitals.label')}
+              </span>
+            </div>
+            <p className="text-slate-400 leading-relaxed">{t('atom.valenceOrbitals.description')}</p>
+            {valenceOrbitals.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {valenceOrbitals.map((orbital) => (
+                  <div
+                    key={orbital.label}
+                    className="rounded border border-white/10 bg-white/5 p-2 space-y-1"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-slate-100">{orbital.label}</span>
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
+                        {t('atom.valenceOrbitals.electronCount', { count: orbital.electrons })}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400">
+                      {t('atom.valenceOrbitals.orbitalCount', { count: orbital.orbitalCount })}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-400 text-[11px]">{t('atom.valenceOrbitals.empty')}</p>
+            )}
+            <p className="text-slate-300 leading-relaxed">{valenceBondingDescription}</p>
+          </div>
           <p className="text-xs text-slate-400 leading-relaxed">{t(`atom.presets.${atomType}.structure`)}</p>
           <div className="flex items-center gap-2 text-xs text-slate-300 flex-wrap">
             <span className="px-2 py-1 rounded bg-white/5 border border-white/10">{t('atom.valence')}</span>

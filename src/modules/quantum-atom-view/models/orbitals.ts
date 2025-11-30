@@ -11,6 +11,7 @@ export interface IOrbitalBase {
   radius: number;
   color: ColorRepresentation;
   phaseOffset: number;
+  isValence: boolean;
 }
 
 export interface IOrbital extends IOrbitalBase {

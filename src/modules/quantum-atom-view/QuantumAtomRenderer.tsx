@@ -33,11 +33,17 @@ const axisFromOrientation = (orientation: POrbitalOrientation) => {
   }
 };
 
-const createParticleGeometry = (count: number, radius: number, orientation?: POrbitalOrientation) => {
-  const positions = new Float32Array(count * 3);
+const createParticleGeometry = (
+  count: number,
+  radius: number,
+  orientation?: POrbitalOrientation,
+  densityScale = 1
+) => {
+  const particleCount = Math.round(count * densityScale);
+  const positions = new Float32Array(particleCount * 3);
   const axis = orientation ? axisFromOrientation(orientation) : new Vector3(0, 1, 0);
 
-  for (let i = 0; i < count; i += 1) {
+  for (let i = 0; i < particleCount; i += 1) {
     const sign = Math.random() > 0.5 ? 1 : -1;
     const axial = (0.4 + Math.random() * 0.8) * radius * sign;
     const perpendicular = new Vector3(
@@ -79,9 +85,10 @@ const OrbitalVolume = ({
 
   useEffect(() => {
     if (materialRef.current) {
+      materialRef.current.uniforms.opacity.value = orbital.isValence ? 0.45 : 0.32;
       onMaterialReady(materialRef.current);
     }
-  }, [onMaterialReady]);
+  }, [onMaterialReady, orbital.isValence]);
 
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
@@ -89,7 +96,7 @@ const OrbitalVolume = ({
       <orbitalNoiseMaterial
         ref={materialRef}
         transparent
-        opacity={0.3}
+        opacity={orbital.isValence ? 0.45 : 0.3}
         color={new Color(orbital.color as string)}
       />
     </mesh>
@@ -104,23 +111,29 @@ const POrbitalParticles = ({
   onMaterialReady: (material: PointsMaterial) => void;
 }) => {
   const particleMaterial = useRef<PointsMaterial>(null);
-  const geometry = useMemo(() => createParticleGeometry(650, orbital.radius * 0.92, orbital.orientation as POrbitalOrientation), [orbital.orientation, orbital.radius]);
+  const densityScale = orbital.isValence ? 1.35 : 1;
+  const geometry = useMemo(
+    () => createParticleGeometry(650, orbital.radius * 0.92, orbital.orientation as POrbitalOrientation, densityScale),
+    [densityScale, orbital.orientation, orbital.radius]
+  );
 
   useEffect(() => () => geometry.dispose(), [geometry]);
 
   useEffect(() => {
     if (particleMaterial.current) {
       particleMaterial.current.userData.phase = orbital.phaseOffset;
+      particleMaterial.current.userData.baseOpacity = orbital.isValence ? 0.23 : 0.18;
+      particleMaterial.current.userData.opacityRange = orbital.isValence ? 0.12 : 0.08;
+      particleMaterial.current.size = orbital.isValence ? 0.058 : 0.05;
       onMaterialReady(particleMaterial.current);
     }
-  }, [onMaterialReady, orbital.phaseOffset]);
+  }, [onMaterialReady, orbital.isValence, orbital.phaseOffset]);
 
   return (
     <points geometry={geometry}>
       <pointsMaterial
         ref={particleMaterial}
         color={orbital.color}
-        size={0.05}
         transparent
         opacity={0.22}
         depthWrite={false}
@@ -159,9 +172,9 @@ const DOrbitalPlaceholder = ({ orbital }: { orbital: IOrbital }) => (
       <meshStandardMaterial
         color={orbital.color}
         transparent
-        opacity={0.25}
+        opacity={orbital.isValence ? 0.32 : 0.25}
         emissive={orbital.color as string}
-        emissiveIntensity={0.25}
+        emissiveIntensity={orbital.isValence ? 0.45 : 0.25}
       />
     </mesh>
   </group>
@@ -218,7 +231,9 @@ export const QuantumAtomRenderer = ({ atom }: QuantumAtomRendererProps) => {
     });
     particleMaterials.current.forEach((mat, index) => {
       const phase = (mat.userData.phase as number | undefined) ?? 0;
-      mat.opacity = 0.18 + 0.08 * Math.sin(t * 0.9 + phase + index * 0.35);
+      const baseOpacity = (mat.userData.baseOpacity as number | undefined) ?? 0.18;
+      const opacityRange = (mat.userData.opacityRange as number | undefined) ?? 0.08;
+      mat.opacity = baseOpacity + opacityRange * Math.sin(t * 0.9 + phase + index * 0.35);
       mat.needsUpdate = true;
     });
   });

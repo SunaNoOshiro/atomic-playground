@@ -7,7 +7,6 @@ import { useSceneStore } from '@state/scene.store';
 const loggingLevels = ['debug', 'info', 'warn', 'error'] as const;
 const themes = ['system', 'light', 'dark'] as const;
 const atomModes = ['realistic', 'simplified'] as const;
-const visualizationModes = ['classic', 'quantum'] as const;
 
 export const SettingsPanel = () => {
   const { t } = useTranslation();
@@ -74,29 +73,6 @@ export const SettingsPanel = () => {
         </label>
 
         <label className="flex flex-col gap-2 text-sm">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-slate-200 font-semibold">{t('settings.visualizationMode')}</span>
-            <span className="text-[11px] text-slate-400">{t('settings.quantumModeInfo')}</span>
-          </div>
-          <select
-            value={settings.visualizationMode}
-            onChange={(e) =>
-              updateSettings({ visualizationMode: e.target.value as (typeof visualizationModes)[number] })
-            }
-            className="bg-white/5 border border-white/10 rounded-lg px-3 py-2"
-          >
-            {visualizationModes.map((mode) => (
-              <option key={mode} value={mode} className="text-slate-900">
-                {t(`settings.visualizationModes.${mode}.label`)}
-              </option>
-            ))}
-          </select>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            {t(`settings.visualizationModes.${settings.visualizationMode}.description`)}
-          </p>
-        </label>
-
-        <label className="flex flex-col gap-2 text-sm">
           <span className="text-slate-200 font-semibold">{t('settings.logging')}</span>
           <select
             value={settings.loggingLevel}
@@ -125,26 +101,6 @@ export const SettingsPanel = () => {
           <span className="text-xs text-slate-400">{settings.animationSpeed.toFixed(1)}x</span>
         </label>
 
-        <label
-          className={`flex flex-col gap-2 text-sm ${settings.visualizationMode !== 'quantum' ? 'opacity-60' : ''}`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-slate-200 font-semibold">{t('settings.quantumIntensity')}</span>
-            <span className="text-xs text-slate-400">{settings.quantumAnimationIntensity.toFixed(1)}x</span>
-          </div>
-          <input
-            type="range"
-            min={0.5}
-            max={1.5}
-            step={0.1}
-            value={settings.quantumAnimationIntensity}
-            onChange={(e) => updateSettings({ quantumAnimationIntensity: Number(e.target.value) })}
-            disabled={settings.visualizationMode !== 'quantum'}
-            className="accent-primary disabled:cursor-not-allowed"
-          />
-          <p className="text-xs text-slate-400">{t('settings.quantumIntensityHint')}</p>
-        </label>
-
         <label className="flex flex-col gap-2 text-sm">
           <span className="text-slate-200 font-semibold">{t('settings.atomMode')}</span>
           <div className="flex gap-2">
@@ -162,30 +118,14 @@ export const SettingsPanel = () => {
           </div>
         </label>
 
-        <label className="flex items-start gap-3 text-sm">
+        <label className="flex items-center gap-3 text-sm">
           <input
             type="checkbox"
             checked={settings.enableLogging}
             onChange={(e) => updateSettings({ enableLogging: e.target.checked })}
-            className="h-4 w-4 rounded border-white/30 bg-white/5 mt-1"
+            className="h-4 w-4 rounded border-white/30 bg-white/5"
           />
-          <div className="flex flex-col gap-1">
-            <span className="text-slate-200">{t('settings.loggingToggle')}</span>
-            <span className="text-xs text-slate-400 leading-relaxed">{t('settings.loggingHint')}</span>
-          </div>
-        </label>
-
-        <label className="flex items-start gap-3 text-sm">
-          <input
-            type="checkbox"
-            checked={settings.reducedMotion}
-            onChange={(e) => updateSettings({ reducedMotion: e.target.checked })}
-            className="h-4 w-4 rounded border-white/30 bg-white/5 mt-1"
-          />
-          <div className="flex flex-col gap-1">
-            <span className="text-slate-200">{t('settings.reducedMotion')}</span>
-            <span className="text-xs text-slate-400 leading-relaxed">{t('settings.reducedMotionHint')}</span>
-          </div>
+          <span className="text-slate-200">{t('settings.loggingToggle')}</span>
         </label>
       </div>
     </section>

@@ -49,6 +49,17 @@
       "empty": "No valence orbitals are available for bonding in this configuration.",
       "bondingHint": "Valence electrons in the highest-energy orbitals drive how atoms share or exchange electrons."
     },
+    "bondingVisualization": {
+      "heading": "Bond interpretation",
+      "bohr": {
+        "title": "Classical sharing",
+        "description": "Bohr view shows bonds as dashed paths between shells. Electrons travel along those lanes, representing simple sharing without orbital deformation."
+      },
+      "quantum": {
+        "title": "Orbital overlap and charge drift",
+        "description": "Quantum view pulls atoms together with pulsating orbital clouds. The overlap glow marks covalent bonding, while the warm gradient shifting toward the heavier nucleus illustrates ionic character."
+      }
+    },
     "structure": {
       "heading": "Structure overview",
       "protons": "Protons",

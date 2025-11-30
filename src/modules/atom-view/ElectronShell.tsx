@@ -80,24 +80,30 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
 
   return (
     <group>
-      <Line
-        points={baseOrbit}
-        color={orbitColor}
-        linewidth={1}
-        dashed
-        dashSize={0.16}
-        gapSize={0.08}
-        opacity={0.85}
-      />
-      {trackLines.map((track) => (
+      {!isRealistic && (
         <Line
-          key={`track-${track.id}`}
-          points={track.points}
-          color={trackColor}
-          linewidth={0.8}
-          opacity={0.78}
+          points={baseOrbit}
+          color={orbitColor}
+          linewidth={1}
+          dashed
+          dashSize={0.16}
+          gapSize={0.08}
+          opacity={0.85}
         />
-      ))}
+      )}
+      {!isRealistic &&
+        trackLines.map((track) => (
+          <Line
+            key={`track-${track.id}`}
+            points={track.points}
+            color={trackColor}
+            linewidth={0.8}
+            dashed
+            dashSize={0.14}
+            gapSize={0.07}
+            opacity={0.78}
+          />
+        ))}
       <group ref={groupRef}>
         {electronTracks.map((electron) => (
           <mesh key={electron.id}>

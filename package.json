@@ -1,0 +1,42 @@
+{
+  "name": "atomic-playground",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.102.5",
+    "@react-three/fiber": "^8.15.16",
+    "clsx": "^2.1.0",
+    "framer-motion": "^10.18.0",
+    "i18next": "^23.7.16",
+    "loglevel": "^1.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^13.5.0",
+    "three": "^0.164.1",
+    "zustand": "^4.5.4",
+    "nanoid": "^5.0.7",
+    "@react-spring/three": "^9.7.3",
+    "@react-spring/web": "^9.7.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.11.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}

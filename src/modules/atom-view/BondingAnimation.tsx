@@ -1,17 +1,24 @@
 import { QuadraticBezierLine } from '@react-three/drei';
 import { Molecule } from '@core/models/atom';
 import { useSpring, a } from '@react-spring/three';
+import { VisualizationMode } from '@core/models/settings';
 
 interface BondingAnimationProps {
   molecule: Molecule;
+  visualizationMode: VisualizationMode;
 }
 
-export const BondingAnimation = ({ molecule }: BondingAnimationProps) => {
-  const { opacity } = useSpring({ from: { opacity: 0 }, to: { opacity: 0.9 }, loop: { reverse: true }, config: { duration: 1200 } });
+export const BondingAnimation = ({ molecule, visualizationMode }: BondingAnimationProps) => {
+  const { opacity } = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: visualizationMode === VisualizationMode.QUANTUM ? 0.8 : 0.9 },
+    loop: { reverse: true },
+    config: { duration: visualizationMode === VisualizationMode.QUANTUM ? 900 : 1200 }
+  });
 
   if (!molecule.bonds.length) return null;
 
-  const bondColor = '#b6a8ff';
+  const bondColor = visualizationMode === VisualizationMode.QUANTUM ? '#7dd3fc' : '#b6a8ff';
 
   return (
     <group>
@@ -24,8 +31,8 @@ export const BondingAnimation = ({ molecule }: BondingAnimationProps) => {
             color={bondColor}
             lineWidth={1.2}
             dashed
-            dashSize={0.18}
-            gapSize={0.12}
+            dashSize={visualizationMode === VisualizationMode.QUANTUM ? 0.12 : 0.18}
+            gapSize={visualizationMode === VisualizationMode.QUANTUM ? 0.08 : 0.12}
             transparent
             opacity={opacity as unknown as number}
           />

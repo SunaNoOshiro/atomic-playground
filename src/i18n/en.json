@@ -78,6 +78,11 @@
     "logging": "Logging level",
     "speed": "Animation speed",
     "atomMode": "Atom mode",
+    "visualizationMode": "Visualization mode",
+    "visualizationModes": {
+      "bohr": "Bohr model",
+      "quantum": "Quantum cloud"
+    },
     "loggingToggle": "Enable logging",
     "atomSelection": "Choose an atom"
   }

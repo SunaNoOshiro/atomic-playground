@@ -9,6 +9,7 @@ import { useSceneStore } from '@state/scene.store';
 import { useSettingsStore } from '@state/settings.store';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
+import { VisualizationMode } from '@core/models/settings';
 
 export const AtomView = () => {
   const { atom, molecule, atomType } = useSceneStore();
@@ -25,14 +26,20 @@ export const AtomView = () => {
     settings.atomMode === 'realistic'
       ? t('atom.modeDescriptions.realistic')
       : t('atom.modeDescriptions.simplified');
+  const visualizationLabel = t(`settings.visualizationModes.${settings.visualizationMode}`);
+  const isQuantum = settings.visualizationMode === VisualizationMode.QUANTUM;
 
   const canvasBackground = useMemo(() => {
     if (settings.theme === 'light') {
       return '#dfe2d6';
     }
 
+    if (isQuantum) {
+      return '#0a1020';
+    }
+
     return settings.atomMode === 'simplified' ? '#0c1624' : '#0a0f1a';
-  }, [settings.atomMode, settings.theme]);
+  }, [isQuantum, settings.atomMode, settings.theme]);
 
   const legend = [
     { color: '#f59f8b', label: t('atom.legend.protons') },
@@ -49,6 +56,7 @@ export const AtomView = () => {
           <p className="text-sm uppercase tracking-[0.2em] text-primary">{t('atom.title')}</p>
           <h3 className="text-2xl font-semibold">{t(`atom.presets.${atomType}.label`)}</h3>
           <p className="text-sm text-slate-400">{t('atom.mode' + (settings.atomMode === 'realistic' ? 'Realistic' : 'Simplified'))}</p>
+          <p className="text-xs text-primary mt-1">{visualizationLabel}</p>
           <p className="mt-1 text-xs text-slate-500 max-w-xl leading-relaxed">{modeDescription}</p>
         </div>
         <div className="flex flex-col gap-2 items-end">
@@ -79,12 +87,31 @@ export const AtomView = () => {
               <Float speed={settings.animationSpeed} rotationIntensity={0.4} floatIntensity={0.6}>
                 <Nucleus protons={atom.atomicNumber} neutrons={atom.neutrons} />
                 {atom.shells.map((shell) => (
-                  <ElectronShell key={shell.level} shell={shell} />
+                  <ElectronShell
+                    key={shell.level}
+                    shell={shell}
+                    visualizationMode={settings.visualizationMode}
+                  />
                 ))}
-                {valenceShell && <ValenceHighlight radius={valenceShell.radius} visible />}
-                <BondingAnimation molecule={molecule} />
+                {valenceShell && (
+                  <ValenceHighlight
+                    radius={valenceShell.radius}
+                    visible
+                    visualizationMode={settings.visualizationMode}
+                  />
+                )}
+                <BondingAnimation molecule={molecule} visualizationMode={settings.visualizationMode} />
               </Float>
-              {settings.atomMode === 'realistic' && <Stars radius={40} depth={20} count={800} factor={4} fade speed={1} />}
+              {settings.atomMode === 'realistic' && (
+                <Stars
+                  radius={40}
+                  depth={20}
+                  count={900}
+                  factor={isQuantum ? 5 : 4}
+                  fade
+                  speed={1}
+                />
+              )}
             </Suspense>
             <OrbitControls enablePan={false} />
           </Canvas>

@@ -21,7 +21,8 @@ export class SettingsService implements ISettingsService {
 
   constructor(provider: ISettingsProvider, defaults: SettingsState) {
     this.provider = provider;
-    this.state = provider.load() ?? defaults;
+    const persisted = provider.load();
+    this.state = persisted ? { ...defaults, ...persisted } : defaults;
   }
 
   getSettings(): SettingsState {

@@ -4,17 +4,20 @@ import { useMemo, useRef } from 'react';
 import { Euler, Group, Matrix4, Vector3 } from 'three';
 import { Shell } from '@core/models/atom';
 import { useSettingsStore } from '@state/settings.store';
+import { VisualizationMode } from '@core/models/settings';
 
 interface ElectronShellProps {
   shell: Shell;
+  visualizationMode: VisualizationMode;
 }
 
-export const ElectronShell = ({ shell }: ElectronShellProps) => {
+export const ElectronShell = ({ shell, visualizationMode }: ElectronShellProps) => {
   const { settings } = useSettingsStore();
   const groupRef = useRef<Group>(null);
   const speed = 0.6 * settings.animationSpeed * (shell.isValence ? 1.4 : 1);
   const isRealistic = settings.atomMode === 'realistic';
   const isLightTheme = settings.theme === 'light';
+  const isQuantum = visualizationMode === VisualizationMode.QUANTUM;
 
   const orbitColor = shell.isValence
     ? isLightTheme
@@ -46,8 +49,8 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
         (Math.random() - 0.5) * (isRealistic ? 0.6 : 0.25)
       );
 
-      const eccentricity = isRealistic ? 0.35 : 0.02;
-      const wobble = isRealistic ? 0.18 : 0.02;
+      const eccentricity = isRealistic ? (isQuantum ? 0.45 : 0.35) : isQuantum ? 0.12 : 0.02;
+      const wobble = isRealistic ? (isQuantum ? 0.26 : 0.18) : isQuantum ? 0.08 : 0.02;
       const xRadius = shell.radius * (1 + eccentricity * 0.4);
       const zRadius = shell.radius * (1 - eccentricity * 0.3);
       const baseOffset = (index / shell.electrons.length) * Math.PI * 2;
@@ -65,6 +68,25 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
       return position.applyMatrix4(matrix);
     });
   }, [shell.radius]);
+
+  const quantumCloud = useMemo(() => {
+    if (visualizationMode !== VisualizationMode.QUANTUM) return null;
+
+    const pointsPerElectron = 30;
+    const totalPoints = shell.electrons.length * pointsPerElectron;
+    const data = new Float32Array(totalPoints * 3);
+
+    for (let i = 0; i < totalPoints; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radialNoise = 0.65 + Math.random() * 0.25;
+      const wobble = (Math.random() - 0.5) * shell.radius * 0.35;
+      data[i * 3] = Math.cos(angle) * shell.radius * radialNoise;
+      data[i * 3 + 1] = wobble;
+      data[i * 3 + 2] = Math.sin(angle) * shell.radius * radialNoise;
+    }
+
+    return data;
+  }, [shell.electrons.length, shell.radius, visualizationMode]);
 
   const trackLines = useMemo(() => {
     return electronTracks.map((track) => {
@@ -99,7 +121,7 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
 
   return (
     <group>
-      {!isRealistic && (
+      {!isRealistic && visualizationMode === VisualizationMode.BOHR && (
         <Line
           points={baseOrbit}
           color={orbitColor}
@@ -110,7 +132,7 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
           opacity={0.85}
         />
       )}
-      {!isRealistic &&
+      {!isRealistic && visualizationMode === VisualizationMode.BOHR &&
         trackLines.map((track) => (
           <Line
             key={`track-${track.id}`}
@@ -123,6 +145,25 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
             opacity={0.78}
           />
         ))}
+      {visualizationMode === VisualizationMode.QUANTUM && quantumCloud && (
+        <points>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              array={quantumCloud}
+              count={quantumCloud.length / 3}
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <pointsMaterial
+            size={0.05}
+            color={electronColor}
+            opacity={0.35}
+            transparent
+            depthWrite={false}
+          />
+        </points>
+      )}
       <group ref={groupRef}>
         {electronTracks.map((electron) => (
           <mesh key={electron.id}>
@@ -130,7 +171,7 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
             <meshStandardMaterial
               color={electronColor}
               emissive={electronColor}
-              emissiveIntensity={0.55}
+              emissiveIntensity={isQuantum ? 0.8 : 0.55}
             />
           </mesh>
         ))}

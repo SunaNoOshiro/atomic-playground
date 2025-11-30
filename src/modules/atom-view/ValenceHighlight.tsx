@@ -11,14 +11,19 @@ interface ValenceHighlightProps {
 
 export const ValenceHighlight = ({ radius, visible, visualizationMode }: ValenceHighlightProps) => {
   const { settings } = useSettingsStore();
+  const motionScale = settings.reducedMotion ? 0.6 : 1;
+  const quantumScale =
+    visualizationMode === VisualizationMode.QUANTUM ? settings.quantumAnimationIntensity : 1;
   const color = settings.atomMode === 'realistic' ? '#f2c94c' : '#f4a261';
   const baseOpacity =
     (settings.atomMode === 'realistic' ? 0.58 : 0.32) *
-    (visualizationMode === VisualizationMode.QUANTUM ? 1.2 : 1);
+    (visualizationMode === VisualizationMode.QUANTUM ? 1.2 : 1) *
+    (0.75 + quantumScale * 0.35) *
+    (motionScale * 0.8 + 0.25);
   const { scale, opacity } = useSpring({
     scale: visible ? 1 : 0.5,
     opacity: visible ? baseOpacity : 0,
-    config: { mass: 1, tension: 170 * settings.animationSpeed, friction: 20 }
+    config: { mass: 1, tension: 170 * settings.animationSpeed * motionScale, friction: 20 }
   });
 
   return (

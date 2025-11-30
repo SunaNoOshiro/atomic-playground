@@ -2,6 +2,7 @@ import { QuadraticBezierLine } from '@react-three/drei';
 import { Molecule } from '@core/models/atom';
 import { useSpring, a } from '@react-spring/three';
 import { VisualizationMode } from '@core/models/settings';
+import { useSettingsStore } from '@state/settings.store';
 
 interface BondingAnimationProps {
   molecule: Molecule;
@@ -9,7 +10,14 @@ interface BondingAnimationProps {
 }
 
 export const BondingAnimation = ({ molecule, visualizationMode }: BondingAnimationProps) => {
-  const { opacity } = useSpring({ from: { opacity: 0 }, to: { opacity: 0.9 }, loop: { reverse: true }, config: { duration: 1200 } });
+  const { settings } = useSettingsStore();
+  const motionScale = settings.reducedMotion ? 0.65 : 1;
+  const { opacity } = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 0.85 },
+    loop: { reverse: true },
+    config: { duration: 1200 / (settings.animationSpeed * motionScale) }
+  });
 
   if (!molecule.bonds.length) return null;
 

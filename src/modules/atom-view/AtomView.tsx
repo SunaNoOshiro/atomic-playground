@@ -55,6 +55,10 @@ export const AtomView = () => {
   });
 
   const visualizationLabel = t(`settings.visualizationOptions.${settings.visualizationMode}`);
+  const motionScale = settings.reducedMotion ? 0.55 : 1;
+  const floatSpeed = settings.animationSpeed * motionScale;
+  const floatIntensity = settings.reducedMotion ? 0.3 : 0.6;
+  const rotationIntensity = settings.reducedMotion ? 0.25 : 0.4;
 
   const canvasBackground = useMemo(() => {
     if (settings.theme === 'light') {
@@ -107,7 +111,7 @@ export const AtomView = () => {
             <ambientLight intensity={0.6} />
             <directionalLight position={[5, 5, 5]} intensity={1.2} />
             <Suspense fallback={null}>
-              <Float speed={settings.animationSpeed} rotationIntensity={0.4} floatIntensity={0.6}>
+              <Float speed={floatSpeed} rotationIntensity={rotationIntensity} floatIntensity={floatIntensity}>
                 {settings.visualizationMode === VisualizationMode.BOHR ? (
                   <>
                     <Nucleus
@@ -137,7 +141,9 @@ export const AtomView = () => {
                   </>
                 )}
               </Float>
-              {settings.atomMode === 'realistic' && <Stars radius={40} depth={20} count={800} factor={4} fade speed={1} />}
+              {settings.atomMode === 'realistic' && (
+                <Stars radius={40} depth={20} count={800} factor={4} fade speed={motionScale * 0.9} />
+              )}
             </Suspense>
             <OrbitControls enablePan={false} />
           </Canvas>

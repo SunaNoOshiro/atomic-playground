@@ -85,7 +85,9 @@ const OrbitalVolume = ({
 
   useEffect(() => {
     if (materialRef.current) {
-      materialRef.current.uniforms.opacity.value = orbital.isValence ? 0.45 : 0.32;
+      const baseOpacity = orbital.isValence ? 0.45 : 0.32;
+      materialRef.current.uniforms.opacity.value = baseOpacity;
+      materialRef.current.userData.baseOpacity = baseOpacity;
       onMaterialReady(materialRef.current);
     }
   }, [onMaterialReady, orbital.isValence]);
@@ -225,15 +227,27 @@ export const QuantumAtomRenderer = ({ atom }: QuantumAtomRendererProps) => {
   }, []);
 
   useFrame(({ clock }) => {
-    const t = clock.getElapsedTime() * settings.animationSpeed;
+    const motionScale = settings.reducedMotion ? 0.5 : 1;
+    const intensityScale = settings.quantumAnimationIntensity;
+    const t = clock.getElapsedTime() * settings.animationSpeed * intensityScale * motionScale;
+
     noiseMaterials.current.forEach((mat, index) => {
+      const baseOpacity = (mat.userData.baseOpacity as number | undefined) ?? mat.uniforms.opacity.value;
+      const opacityScale = 0.7 + intensityScale * 0.5;
       mat.uniforms.time.value = t + index * 0.12 + (mat.userData.phase ?? 0);
+      mat.uniforms.opacity.value = Math.min(1, baseOpacity * opacityScale * (motionScale * 0.75 + 0.35));
     });
+
     particleMaterials.current.forEach((mat, index) => {
       const phase = (mat.userData.phase as number | undefined) ?? 0;
       const baseOpacity = (mat.userData.baseOpacity as number | undefined) ?? 0.18;
       const opacityRange = (mat.userData.opacityRange as number | undefined) ?? 0.08;
-      mat.opacity = baseOpacity + opacityRange * Math.sin(t * 0.9 + phase + index * 0.35);
+      const pulseScale = 0.55 + intensityScale * 0.6;
+      const damping = motionScale * 0.8 + 0.25;
+      mat.opacity = Math.min(
+        1,
+        baseOpacity * pulseScale + opacityRange * damping * Math.sin(t * 0.9 + phase + index * 0.35)
+      );
       mat.needsUpdate = true;
     });
   });

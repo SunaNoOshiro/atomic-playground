@@ -14,9 +14,13 @@ interface ElectronShellProps {
 export const ElectronShell = ({ shell, visualizationMode }: ElectronShellProps) => {
   const { settings } = useSettingsStore();
   const groupRef = useRef<Group>(null);
+  const motionScale = settings.reducedMotion ? 0.55 : 1;
+  const quantumScale =
+    visualizationMode === VisualizationMode.QUANTUM ? settings.quantumAnimationIntensity : 1;
   const speed =
-    0.6 * settings.animationSpeed * (shell.isValence ? 1.4 : 1) *
-    (visualizationMode === VisualizationMode.QUANTUM ? 1.1 : 1);
+    0.6 * settings.animationSpeed * motionScale * (shell.isValence ? 1.4 : 1) *
+    (visualizationMode === VisualizationMode.QUANTUM ? 1.1 : 1) *
+    quantumScale;
   const isRealistic = settings.atomMode === 'realistic';
   const isLightTheme = settings.theme === 'light';
   const isQuantum = visualizationMode === VisualizationMode.QUANTUM;
@@ -46,20 +50,20 @@ export const ElectronShell = ({ shell, visualizationMode }: ElectronShellProps) 
   const electronTracks = useMemo(() => {
     return shell.electrons.map((electron, index) => {
       const tilt = new Euler(
-        (Math.random() - 0.5) * (isRealistic ? 0.9 : 0.45) * (isQuantum ? 1.15 : 1),
-        (Math.random() - 0.5) * (isRealistic ? 0.9 : 0.45) * (isQuantum ? 1.15 : 1),
-        (Math.random() - 0.5) * (isRealistic ? 0.6 : 0.25) * (isQuantum ? 1.1 : 1)
+        (Math.random() - 0.5) * (isRealistic ? 0.9 : 0.45) * (isQuantum ? 1.15 : 1) * motionScale,
+        (Math.random() - 0.5) * (isRealistic ? 0.9 : 0.45) * (isQuantum ? 1.15 : 1) * motionScale,
+        (Math.random() - 0.5) * (isRealistic ? 0.6 : 0.25) * (isQuantum ? 1.1 : 1) * motionScale
       );
 
-      const eccentricity = (isRealistic ? 0.35 : 0.02) * (isQuantum ? 1.25 : 1);
-      const wobble = (isRealistic ? 0.18 : 0.02) * (isQuantum ? 1.3 : 1);
+      const eccentricity = (isRealistic ? 0.35 : 0.02) * (isQuantum ? 1.25 : 1) * (motionScale * 0.6 + 0.4);
+      const wobble = (isRealistic ? 0.18 : 0.02) * (isQuantum ? 1.3 : 1) * motionScale * quantumScale;
       const xRadius = shell.radius * (1 + eccentricity * 0.4);
       const zRadius = shell.radius * (1 - eccentricity * 0.3);
       const baseOffset = (index / shell.electrons.length) * Math.PI * 2;
 
       return { id: electron.id, tilt, wobble, xRadius, zRadius, offset: baseOffset };
     });
-  }, [isRealistic, shell.electrons, shell.radius]);
+  }, [isQuantum, isRealistic, motionScale, quantumScale, shell.electrons, shell.radius]);
 
   const baseOrbit = useMemo(() => {
     const baseTilt = new Euler((Math.random() - 0.5) * 0.2, (Math.random() - 0.5) * 0.2, 0);

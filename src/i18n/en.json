@@ -103,9 +103,22 @@
     "speed": "Animation speed",
     "atomMode": "Atom mode",
     "visualizationMode": "Visualization mode",
+    "visualizationDescriptions": {
+      "bohr": "Bohr mode keeps neat dashed tracks and calmer wobble so shell spacing is easy to compare.",
+      "quantum": "Quantum mode adds cloud noise, pulsing overlap, and denser particles to hint at orbital overlap."
+    },
     "visualizationOptions": {
       "bohr": "Bohr model",
       "quantum": "Quantum cloud"
+    },
+    "quantumIntensity": {
+      "label": "Quantum animation intensity",
+      "description": "Tweak how strongly the cloud flickers, particle pulses, and overlap glows respond in quantum view.",
+      "value": "{{value}}x"
+    },
+    "reducedMotion": {
+      "label": "Reduced motion",
+      "description": "Soften floating, wobble, and pulsing animations to reduce motion strain."
     },
     "loggingToggle": "Enable logging",
     "atomSelection": "Choose an atom"

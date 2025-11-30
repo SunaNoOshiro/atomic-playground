@@ -14,6 +14,7 @@ export const SettingsPanel = () => {
   const { t } = useTranslation();
   const { settings, updateSettings } = useSettingsStore();
   const { atomOptions, atomType, selectAtom } = useSceneStore();
+  const visualizationDescription = t(`settings.visualizationDescriptions.${settings.visualizationMode}`);
 
   useEffect(() => {
     changeLanguage(settings.language);
@@ -139,6 +140,26 @@ export const SettingsPanel = () => {
               </button>
             ))}
           </div>
+          <p className="text-xs text-slate-400 leading-relaxed">{visualizationDescription}</p>
+        </label>
+
+        <label className="flex flex-col gap-2 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-slate-200 font-semibold">{t('settings.quantumIntensity.label')}</span>
+            <span className="text-xs text-slate-400">
+              {t('settings.quantumIntensity.value', { value: settings.quantumAnimationIntensity.toFixed(1) })}
+            </span>
+          </div>
+          <input
+            type="range"
+            min={0.4}
+            max={1.6}
+            step={0.1}
+            value={settings.quantumAnimationIntensity}
+            onChange={(e) => updateSettings({ quantumAnimationIntensity: Number(e.target.value) })}
+            className="accent-primary"
+          />
+          <span className="text-xs text-slate-400">{t('settings.quantumIntensity.description')}</span>
         </label>
 
         <label className="flex items-center gap-3 text-sm">
@@ -150,6 +171,19 @@ export const SettingsPanel = () => {
           />
           <span className="text-slate-200">{t('settings.loggingToggle')}</span>
         </label>
+
+        <div className="flex items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={settings.reducedMotion}
+            onChange={(e) => updateSettings({ reducedMotion: e.target.checked })}
+            className="mt-1 h-4 w-4 rounded border-white/30 bg-white/5"
+          />
+          <div className="flex flex-col gap-1">
+            <span className="text-slate-200 font-semibold">{t('settings.reducedMotion.label')}</span>
+            <span className="text-xs text-slate-400">{t('settings.reducedMotion.description')}</span>
+          </div>
+        </div>
       </div>
     </section>
   );

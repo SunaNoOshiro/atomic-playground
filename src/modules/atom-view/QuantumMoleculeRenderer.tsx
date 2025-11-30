@@ -52,11 +52,13 @@ const BondVisualization = ({
   visualizationMode: VisualizationMode;
 }) => {
   const { settings } = useSettingsStore();
+  const motionScale = settings.reducedMotion ? 0.55 : 1;
+  const intensityScale = settings.quantumAnimationIntensity;
   const { approach, overlapPulse } = useSpring({
     from: { approach: 0, overlapPulse: 0.65 },
     to: { approach: 1, overlapPulse: 1 },
     loop: { reverse: true },
-    config: { duration: 2600 / settings.animationSpeed }
+    config: { duration: 2600 / (settings.animationSpeed * motionScale) }
   });
 
   const normalizedDirection = useMemo(() => direction.clone().normalize(), [direction]);
@@ -94,14 +96,14 @@ const BondVisualization = ({
           <meshStandardMaterial
             color={bondColor}
             transparent
-            opacity={0.32}
+            opacity={0.32 * (0.65 + motionScale * 0.45)}
             emissive={bondColor}
-            emissiveIntensity={0.45}
+            emissiveIntensity={0.45 * (0.65 + intensityScale * 0.5)}
           />
         </mesh>
         <mesh scale={1.35}>
           <sphereGeometry args={[0.36, 32, 32]} />
-          <meshStandardMaterial color={bondColor} transparent opacity={0.18} />
+          <meshStandardMaterial color={bondColor} transparent opacity={0.18 * (0.7 + intensityScale * 0.4)} />
         </mesh>
       </a.group>
 
@@ -117,20 +119,20 @@ const BondVisualization = ({
           <meshStandardMaterial
             color={overlapColor}
             transparent
-            opacity={0.32}
+            opacity={0.32 * (0.65 + motionScale * 0.45)}
             emissive={overlapColor}
-            emissiveIntensity={0.4}
+            emissiveIntensity={0.4 * (0.65 + intensityScale * 0.5)}
           />
         </mesh>
         <mesh scale={1.35}>
           <sphereGeometry args={[0.36, 32, 32]} />
-          <meshStandardMaterial color={overlapColor} transparent opacity={0.18} />
+          <meshStandardMaterial color={overlapColor} transparent opacity={0.18 * (0.7 + intensityScale * 0.4)} />
         </mesh>
       </a.group>
 
       <a.mesh
         position={approach.to((t) => [0, 0, 0.08 + 0.05 * Math.sin(t * Math.PI)])}
-        scale={overlapPulse.to((pulse) => 0.72 + pulse * 0.35)}
+        scale={overlapPulse.to((pulse) => 0.72 + pulse * 0.35 * intensityScale * motionScale)}
       >
         <icosahedronGeometry args={[0.35, 1]} />
         <meshStandardMaterial
@@ -138,7 +140,7 @@ const BondVisualization = ({
           transparent
           opacity={0.35}
           emissive={overlapColor}
-          emissiveIntensity={0.8}
+          emissiveIntensity={0.8 * (0.7 + intensityScale * 0.4)}
         />
       </a.mesh>
 
@@ -156,7 +158,7 @@ const BondVisualization = ({
           vertexColors
           size={0.06}
           transparent
-          opacity={0.9}
+          opacity={0.9 * (0.65 + intensityScale * 0.5)}
           depthWrite={false}
           blending={AdditiveBlending}
           sizeAttenuation
@@ -171,7 +173,7 @@ const BondVisualization = ({
           color={bondColor}
           lineWidth={1.1}
           transparent
-          opacity={0.85}
+          opacity={0.85 * (0.65 + intensityScale * 0.45)}
         />
       </a.group>
     </group>

@@ -15,6 +15,8 @@ export interface SettingsState {
   atomMode: AtomMode;
   enableLogging: boolean;
   visualizationMode: VisualizationMode;
+  quantumAnimationIntensity: number;
+  reducedMotion: boolean;
 }
 
 export interface ISettingsProvider {

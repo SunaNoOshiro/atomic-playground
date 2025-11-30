@@ -9,6 +9,10 @@ interface BondingAnimationProps {
 export const BondingAnimation = ({ molecule }: BondingAnimationProps) => {
   const { opacity } = useSpring({ from: { opacity: 0 }, to: { opacity: 0.9 }, loop: { reverse: true }, config: { duration: 1200 } });
 
+  if (!molecule.bonds.length) return null;
+
+  const bondColor = '#b6a8ff';
+
   return (
     <group>
       {molecule.bonds.map((bond) => (
@@ -17,11 +21,11 @@ export const BondingAnimation = ({ molecule }: BondingAnimationProps) => {
             start={[0, 0, 0]}
             end={[Math.random() * 2 - 1, Math.random() * 1.5, Math.random() * 2 - 1]}
             mid={[0, 0.2, 0]}
-            color="#FF6584"
-            lineWidth={2}
+            color={bondColor}
+            lineWidth={1.2}
             dashed
-            dashSize={0.2}
-            gapSize={0.1}
+            dashSize={0.18}
+            gapSize={0.12}
             transparent
             opacity={opacity as unknown as number}
           />

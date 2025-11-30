@@ -12,6 +12,7 @@ export const useOrbitals = (atom: Atom): IOrbitalSet[] => {
       let remainingElectrons = shell.electrons.length;
       const orbitals: IOrbital[] = [];
       const baseColor = shell.isValence ? '#c8b5ff' : '#7ad0e3';
+      const isValence = shell.isValence;
 
       if (remainingElectrons > 0) {
         const electrons = Math.min(2, remainingElectrons);
@@ -22,6 +23,7 @@ export const useOrbitals = (atom: Atom): IOrbitalSet[] => {
           electrons,
           radius: shell.radius * 0.7,
           color: baseColor,
+          isValence,
           phaseOffset: Math.random() * Math.PI * 2
         });
         remainingElectrons -= electrons;
@@ -39,6 +41,7 @@ export const useOrbitals = (atom: Atom): IOrbitalSet[] => {
             orientation: pOrientations[orientationIndex],
             radius: shell.radius,
             color: baseColor,
+            isValence,
             phaseOffset: Math.random() * Math.PI * 2
           });
           remainingElectrons -= electrons;
@@ -58,6 +61,7 @@ export const useOrbitals = (atom: Atom): IOrbitalSet[] => {
             orientation: dOrientations[orientationIndex],
             radius: shell.radius * 1.15,
             color: baseColor,
+            isValence,
             phaseOffset: Math.random() * Math.PI * 2
           });
           remainingElectrons -= electrons;

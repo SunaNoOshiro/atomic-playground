@@ -39,6 +39,16 @@
       "valence": "Valence shell highlight",
       "bonds": "Animated bond hints"
     },
+    "valenceOrbitals": {
+      "heading": "Valence orbitals",
+      "label": "Bonding focus",
+      "description": "Outer electrons live in these orbitals. The labels combine principal level and orbital shape so you can see which regions of space drive bonding.",
+      "electronCount": "{{count}} e⁻",
+      "orbitalCount_one": "{{count}} orbital orientation",
+      "orbitalCount_other": "{{count}} orbital orientations",
+      "empty": "No valence orbitals are available for bonding in this configuration.",
+      "bondingHint": "Valence electrons in the highest-energy orbitals drive how atoms share or exchange electrons."
+    },
     "structure": {
       "heading": "Structure overview",
       "protons": "Protons",
@@ -50,17 +60,20 @@
       "oxygen": {
         "label": "Oxygen",
         "summary": "Oxygen has three occupied shells with six valence electrons that seek bonds to stabilize the outer shell.",
-        "structure": "Two electrons fill the first shell, six more occupy the second and third shells, creating a reactive valence shell."
+        "structure": "Two electrons fill the first shell, six more occupy the second and third shells, creating a reactive valence shell.",
+        "bonding": "Oxygen fills its 2s pair but keeps four electrons spread across the 2p orbitals, leaving two unpaired electrons eager to form covalent bonds."
       },
       "hydrogen": {
         "label": "Hydrogen",
         "summary": "Hydrogen contains a single proton and electron, making it highly reactive and eager to share electrons.",
-        "structure": "One electron orbits close to the nucleus with no inner shielding, so it pairs easily with other atoms."
+        "structure": "One electron orbits close to the nucleus with no inner shielding, so it pairs easily with other atoms.",
+        "bonding": "With one 1s valence electron, hydrogen looks for a duet by sharing or exchanging that electron in single bonds."
       },
       "helium": {
         "label": "Helium",
         "summary": "Helium carries two protons, two neutrons, and a full first shell, resulting in an inert, stable atom.",
-        "structure": "Both electrons sit in the first shell, leaving no valence electrons and making helium chemically noble."
+        "structure": "Both electrons sit in the first shell, leaving no valence electrons and making helium chemically noble.",
+        "bonding": "Helium’s filled 1s orbital completes its duet, so it rarely participates in bonding."
       }
     }
   },

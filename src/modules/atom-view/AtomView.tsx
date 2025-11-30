@@ -5,6 +5,7 @@ import { Nucleus } from './Nucleus';
 import { ElectronShell } from './ElectronShell';
 import { ValenceHighlight } from './ValenceHighlight';
 import { BondingAnimation } from './BondingAnimation';
+import { QuantumMoleculeRenderer } from './QuantumMoleculeRenderer';
 import { useSceneStore } from '@state/scene.store';
 import { useSettingsStore } from '@state/settings.store';
 import { useTranslation } from 'react-i18next';
@@ -127,7 +128,13 @@ export const AtomView = () => {
                     <BondingAnimation molecule={molecule} visualizationMode={settings.visualizationMode} />
                   </>
                 ) : (
-                  <QuantumAtomRenderer atom={atom} />
+                  <>
+                    <QuantumAtomRenderer atom={atom} />
+                    <QuantumMoleculeRenderer
+                      molecule={molecule}
+                      visualizationMode={settings.visualizationMode}
+                    />
+                  </>
                 )}
               </Float>
               {settings.atomMode === 'realistic' && <Stars radius={40} depth={20} count={800} factor={4} fade speed={1} />}
@@ -205,6 +212,29 @@ export const AtomView = () => {
               <p className="text-slate-400 text-[11px]">{t('atom.valenceOrbitals.empty')}</p>
             )}
             <p className="text-slate-300 leading-relaxed">{valenceBondingDescription}</p>
+          </div>
+          <div className="rounded-lg border border-accent/30 bg-accent/5 p-3 text-xs text-slate-200 space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="font-semibold text-slate-100">{t('atom.bondingVisualization.heading')}</p>
+              <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-[11px]">
+                {visualizationLabel}
+              </span>
+            </div>
+            {settings.visualizationMode === VisualizationMode.BOHR ? (
+              <>
+                <p className="font-semibold text-primary text-[13px]">{t('atom.bondingVisualization.bohr.title')}</p>
+                <p className="text-slate-300 leading-relaxed">
+                  {t('atom.bondingVisualization.bohr.description')}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="font-semibold text-primary text-[13px]">{t('atom.bondingVisualization.quantum.title')}</p>
+                <p className="text-slate-300 leading-relaxed">
+                  {t('atom.bondingVisualization.quantum.description')}
+                </p>
+              </>
+            )}
           </div>
           <p className="text-xs text-slate-400 leading-relaxed">{t(`atom.presets.${atomType}.structure`)}</p>
           <div className="flex items-center gap-2 text-xs text-slate-300 flex-wrap">

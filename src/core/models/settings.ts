@@ -2,6 +2,11 @@ export type Theme = 'light' | 'dark' | 'system';
 export type AtomMode = 'realistic' | 'simplified';
 export type LoggingLevel = 'debug' | 'info' | 'warn' | 'error';
 
+export enum VisualizationMode {
+  BOHR = 'bohr',
+  QUANTUM = 'quantum'
+}
+
 export interface SettingsState {
   theme: Theme;
   language: string;
@@ -9,6 +14,7 @@ export interface SettingsState {
   animationSpeed: number;
   atomMode: AtomMode;
   enableLogging: boolean;
+  visualizationMode: VisualizationMode;
 }
 
 export interface ISettingsProvider {

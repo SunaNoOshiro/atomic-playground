@@ -2,13 +2,17 @@ import { Instance, Instances } from '@react-three/drei';
 import { useMemo, useRef } from 'react';
 import { Color, Object3D, Vector3 } from 'three';
 import { useFrame } from '@react-three/fiber';
+import { VisualizationMode } from '@core/models/settings';
 
 interface NucleusProps {
   protons: number;
   neutrons: number;
+  visualizationMode: VisualizationMode;
 }
 
-export const Nucleus = ({ protons, neutrons }: NucleusProps) => {
+export const Nucleus = ({ protons, neutrons, visualizationMode }: NucleusProps) => {
+  const isQuantum = visualizationMode === VisualizationMode.QUANTUM;
+
   const particles = useMemo(() => {
     const all = Array.from({ length: protons + neutrons }, (_, idx) => ({
       position: new Vector3(
@@ -17,11 +21,11 @@ export const Nucleus = ({ protons, neutrons }: NucleusProps) => {
         (Math.random() - 0.5) * 0.6
       ),
       color: idx < protons ? new Color('#f59f8b') : new Color('#9ad6b0'),
-      wobbleSpeed: 1.2 + Math.random() * 0.6,
-      wobbleIntensity: 0.02 + Math.random() * 0.02
+      wobbleSpeed: (1.2 + Math.random() * 0.6) * (isQuantum ? 1.25 : 1),
+      wobbleIntensity: (0.02 + Math.random() * 0.02) * (isQuantum ? 1.3 : 1)
     }));
     return all;
-  }, [protons, neutrons]);
+  }, [isQuantum, neutrons, protons]);
 
   const instanceRefs = useRef<Object3D[]>([]);
 

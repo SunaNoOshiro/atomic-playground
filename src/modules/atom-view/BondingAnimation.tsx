@@ -1,17 +1,19 @@
 import { QuadraticBezierLine } from '@react-three/drei';
 import { Molecule } from '@core/models/atom';
 import { useSpring, a } from '@react-spring/three';
+import { VisualizationMode } from '@core/models/settings';
 
 interface BondingAnimationProps {
   molecule: Molecule;
+  visualizationMode: VisualizationMode;
 }
 
-export const BondingAnimation = ({ molecule }: BondingAnimationProps) => {
+export const BondingAnimation = ({ molecule, visualizationMode }: BondingAnimationProps) => {
   const { opacity } = useSpring({ from: { opacity: 0 }, to: { opacity: 0.9 }, loop: { reverse: true }, config: { duration: 1200 } });
 
   if (!molecule.bonds.length) return null;
 
-  const bondColor = '#b6a8ff';
+  const bondColor = visualizationMode === VisualizationMode.QUANTUM ? '#8ec5ff' : '#b6a8ff';
 
   return (
     <group>

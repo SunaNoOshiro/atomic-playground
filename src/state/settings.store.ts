@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { SettingsService, LocalSettingsProvider } from '@core/services/SettingsService';
-import { SettingsState } from '@core/models/settings';
+import { SettingsState, VisualizationMode } from '@core/models/settings';
 import { bindSettingsToLoggers } from '@core/services/LoggerService';
 
 const defaults: SettingsState = {
@@ -9,7 +9,8 @@ const defaults: SettingsState = {
   loggingLevel: 'info',
   animationSpeed: 1,
   atomMode: 'realistic',
-  enableLogging: true
+  enableLogging: true,
+  visualizationMode: VisualizationMode.BOHR
 };
 
 const settingsService = new SettingsService(new LocalSettingsProvider(), defaults);

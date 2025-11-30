@@ -4,17 +4,22 @@ import { useMemo, useRef } from 'react';
 import { Euler, Group, Matrix4, Vector3 } from 'three';
 import { Shell } from '@core/models/atom';
 import { useSettingsStore } from '@state/settings.store';
+import { VisualizationMode } from '@core/models/settings';
 
 interface ElectronShellProps {
   shell: Shell;
+  visualizationMode: VisualizationMode;
 }
 
-export const ElectronShell = ({ shell }: ElectronShellProps) => {
+export const ElectronShell = ({ shell, visualizationMode }: ElectronShellProps) => {
   const { settings } = useSettingsStore();
   const groupRef = useRef<Group>(null);
-  const speed = 0.6 * settings.animationSpeed * (shell.isValence ? 1.4 : 1);
+  const speed =
+    0.6 * settings.animationSpeed * (shell.isValence ? 1.4 : 1) *
+    (visualizationMode === VisualizationMode.QUANTUM ? 1.1 : 1);
   const isRealistic = settings.atomMode === 'realistic';
   const isLightTheme = settings.theme === 'light';
+  const isQuantum = visualizationMode === VisualizationMode.QUANTUM;
 
   const orbitColor = shell.isValence
     ? isLightTheme
@@ -41,13 +46,13 @@ export const ElectronShell = ({ shell }: ElectronShellProps) => {
   const electronTracks = useMemo(() => {
     return shell.electrons.map((electron, index) => {
       const tilt = new Euler(
-        (Math.random() - 0.5) * (isRealistic ? 0.9 : 0.45),
-        (Math.random() - 0.5) * (isRealistic ? 0.9 : 0.45),
-        (Math.random() - 0.5) * (isRealistic ? 0.6 : 0.25)
+        (Math.random() - 0.5) * (isRealistic ? 0.9 : 0.45) * (isQuantum ? 1.15 : 1),
+        (Math.random() - 0.5) * (isRealistic ? 0.9 : 0.45) * (isQuantum ? 1.15 : 1),
+        (Math.random() - 0.5) * (isRealistic ? 0.6 : 0.25) * (isQuantum ? 1.1 : 1)
       );
 
-      const eccentricity = isRealistic ? 0.35 : 0.02;
-      const wobble = isRealistic ? 0.18 : 0.02;
+      const eccentricity = (isRealistic ? 0.35 : 0.02) * (isQuantum ? 1.25 : 1);
+      const wobble = (isRealistic ? 0.18 : 0.02) * (isQuantum ? 1.3 : 1);
       const xRadius = shell.radius * (1 + eccentricity * 0.4);
       const zRadius = shell.radius * (1 - eccentricity * 0.3);
       const baseOffset = (index / shell.electrons.length) * Math.PI * 2;
